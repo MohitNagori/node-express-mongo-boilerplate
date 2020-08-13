@@ -1,0 +1,26 @@
+{
+  "APP_PORT": 3000,
+  "BASE_URL": "http://localhost",
+  "MONGODB": {
+    "url": "mongodb://localhost:27017/starter-dev-db",
+    "options": {
+      "useNewUrlParser" : true,
+      "useCreateIndex": true,
+      "useFindAndModify": false,
+      "useUnifiedTopology": true
+    }
+  },
+  "JWT": {
+    "secret": "f3236849-3c0d-4696-b5af-4ccb84de8564",
+    "options": {
+      "expiresIn":  7200
+    }
+  },
+  "REDIS": {
+    "port": 6379,
+    "host": "localhost"
+  },
+  "LOGGER": {
+    "level": "debug"
+  }
+}

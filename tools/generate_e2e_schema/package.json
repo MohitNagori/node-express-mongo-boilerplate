@@ -1,0 +1,14 @@
+{
+  "name": "generate_e2e_schema",
+  "version": "1.0.0",
+  "description": "Generate the end 2 end schema for api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "swagger-test-templates": "^1.5.1"
+  }
+}

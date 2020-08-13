@@ -1,0 +1,23 @@
+{
+  "JWT": {
+    "secret": "someTestToken",
+    "options": {
+      "expiresIn":  7200
+    }
+  },
+  "LOGGER": {
+    "level": "none"
+  },
+  "MONGODB": {
+    "url": "mongodb://localhost:27017/starter-test-db",
+    "options": {
+      "useNewUrlParser" : true,
+      "useCreateIndex": true,
+      "useFindAndModify": false
+    }
+  },
+  "MOCHA_OPTIONS": {
+    "reporter": "spec",
+    "bail": true
+  }
+}

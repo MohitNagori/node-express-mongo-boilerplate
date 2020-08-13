@@ -1,0 +1,21 @@
+all: true
+extension: ['.js']
+excludeNodeModules: true
+branches: 99,
+lines: 99,
+functions: 99,
+statements: 99
+sourceMap: true
+check-coverage: true
+reporter: ['lcov', 'text-summary']
+exclude: [
+  'logs/**',
+  'database/migrationScripts/*.js',
+  'coverage/**/*.js',
+  'utils/*.js',
+  'migration.js',
+  'pre-test.js',
+  'test.js',
+  'tools/generate_e2e_schema/**',
+  'testcases/e2e/**'
+]

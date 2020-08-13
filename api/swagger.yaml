@@ -1,0 +1,445 @@
+swagger: "2.0"
+info:
+  description: "This is a starter demo with Swagger Ui and JWT"
+  version: "1.0.0"
+  title: "Starter"
+host: "localhost:3000"
+basePath: "/api"
+tags:
+- name: "Status"
+  description: "Check the status of server"
+- name: "Auth"
+  description: "Authentication related routes"
+- name: "User"
+  description: "User CRUD operation related routes"
+- name: "User's miscellaneous operation"
+  description: "User's miscellaneous operation related routes"
+schemes:
+- "http"
+produces:
+- "application/json"
+consumes:
+- "application/json"
+paths:
+  /status:
+    get:
+      tags:
+      - "Status"
+      summary: "Allow user to check the status of the system"
+      description: "Check system status"
+      x-swagger-router-controller: "StatusController"
+      operationId: "getSystemStatus"
+      responses:
+        200:
+          description: "Success response structure of Status of system"
+          schema:
+            $ref: "#/definitions/status_response"
+        default:
+          $ref: "#/responses/default_error_response"
+  /login:
+    post:
+      tags:
+      - "Auth"
+      summary: "Allow user to login into the system"
+      description: "User can login into the system with valid credentials"
+      x-swagger-router-controller: "AuthenticationController"
+      operationId: "login"
+      parameters:
+      - $ref: "#/parameters/credentials"
+      responses:
+        200:
+          description: "Success response structure while Successfully login into the system"
+          schema:
+            $ref: "#/definitions/user_response_def"
+        default:
+          $ref: "#/responses/default_error_response"
+  /logout:
+    get:
+      tags:
+      - "Auth"
+      summary: "Allow user to logout from the system"
+      description: "User can logout from the system"
+      x-swagger-router-controller: "AuthenticationController"
+      operationId: "logout"
+      security:
+      - Authorization: []
+      responses:
+        200:
+          description: "Successfully logout from the system"
+          schema:
+            $ref: "#/definitions/logout_response_def"
+        default:
+          $ref: "#/responses/default_error_response"
+  /user:
+    post:
+      tags:
+      - "User"
+      summary: "Allow user to register into the system"
+      description: "User can register into the system"
+      x-swagger-router-controller: "UserController"
+      operationId: "createUser"
+      parameters:
+      - $ref: "#/parameters/user_registration_body"
+      responses:
+        201:
+          description: "Success response structure while User successfully register into the system"
+          schema:
+            $ref: "#/definitions/user_response_def"
+        default:
+          $ref: "#/responses/default_error_response"
+    get:
+      tags:
+      - "User"
+      summary: "Get registered user list of the system"
+      description: "Retrieves user list of the system"
+      x-swagger-router-controller: "UserController"
+      operationId: "getUserList"
+      security:
+      - Authorization: []
+      parameters:
+        - $ref: "#/parameters/filter_user_first_name"
+        - $ref: "#/parameters/filter_user_last_name"
+        - $ref: "#/parameters/filter_user_email"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/itemsPerPage"
+        - $ref: "#/parameters/userSortBy"
+      responses:
+        200:
+          description: "Success response structure of get registered user list of the system"
+          headers:
+            x-items-count:
+              type: integer
+              description: "Total number of records."
+            x-page-links:
+              type: string
+              description: "Link requires for support Pagination."
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/user_response_def"
+        204:
+          $ref: "#/responses/no_content_found"
+        default:
+          $ref: "#/responses/default_error_response"
+  /user/{user_id}:
+    parameters:
+    - $ref: "#/parameters/user_id"
+    x-swagger-router-controller: "UserController"
+    get:
+      tags:
+      - "User"
+      summary: "Get user detail by id"
+      description: "Provide user data by user id"
+      operationId: "getUserById"
+      security:
+      - Authorization: []
+      responses:
+        200:
+          description: "Success response structure of get registered user by id"
+          schema:
+            $ref: "#/definitions/user_response_def"
+        default:
+          $ref: "#/responses/default_error_response"
+    put:
+      tags:
+      - "User"
+      summary: "Update user detail by id"
+      description: "Update user data by user id"
+      operationId: "updateUserById"
+      parameters:
+      - $ref: "#/parameters/update_user_body"
+      security:
+      - Authorization: []
+      x-only-allowed-owner-admin: true
+      responses:
+        200:
+          description: "Success response structure after User successfully update"
+          schema:
+            $ref: "#/definitions/user_response_def"
+        default:
+          $ref: "#/responses/default_error_response"
+    delete:
+      tags:
+      - "User"
+      summary: "Delete user detail by id"
+      description: "Delete user from system"
+      operationId: "deleteUserById"
+      security:
+      - Authorization: []
+      x-only-allowed-owner-admin: true
+      responses:
+        200:
+          description: "Success response structure of get registered user by id"
+          schema:
+            $ref: "#/definitions/user_response_def"
+        default:
+          $ref: "#/responses/default_error_response"
+  /user/{user_id}/changePassword:
+    put:
+      tags:
+      - "User's miscellaneous operation"
+      summary: "Allow user to change password"
+      description: "User can change the password with valid credentials"
+      operationId: "changePassword"
+      x-swagger-router-controller: "UserMiscController"
+      security:
+      - Authorization: []
+      x-only-allowed-owner-admin: true
+      parameters:
+      - $ref: "#/parameters/user_id"
+      - $ref: "#/parameters/change_password"
+      responses:
+        200:
+          description: "Success response structure while Successfully change the password"
+          schema:
+            $ref: "#/definitions/user_response_def"
+        default:
+          $ref: "#/responses/default_error_response"
+definitions:
+  logout_response_def:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+  status_response:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      responseAt:
+        type: "string"
+        format: "date-time"
+    required:
+    - message
+    - responseAt
+  credentials:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+      password:
+        type: "string"
+        minLength: 8
+        maxLength: 25
+    required:
+    - email
+    - password
+  default_error_response:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+      errors:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            path:
+              type: array
+    required:
+    - message
+  name_with_pattern_def:
+    type: "string"
+    pattern: "^[a-zA-Z]{2,}$"
+  user_registration_body_def:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+      dob:
+        type: "string"
+        format: date
+        example: '2017-07-21'
+      password:
+        type: "string"
+        minLength: 8
+        maxLength: 25
+      first_name:
+        $ref: "#/definitions/name_with_pattern_def"
+      last_name:
+        $ref: "#/definitions/name_with_pattern_def"
+    required:
+    - email
+    - password
+    - first_name
+    - last_name
+    - dob
+  update_user_body_def:
+    type: "object"
+    properties:
+      first_name:
+        $ref: "#/definitions/name_with_pattern_def"
+      last_name:
+        $ref: "#/definitions/name_with_pattern_def"
+      email:
+        type: "string"
+        format: "email"
+      dob:
+        type: "string"
+        format: date
+        example: '2017-07-21'
+  user_response_def:
+    allOf:
+    - $ref: "#/definitions/mongoose_default_properties"
+    - type: "object"
+      required:
+        - email
+        - user_role
+        - first_name
+        - last_name
+        - dob
+      properties:
+        email:
+          type: "string"
+          format: "email"
+        first_name:
+          type: "string"
+        last_name:
+          type: "string"
+        user_role:
+          type: "string"
+        dob:
+          type: "string"
+          format: date
+  change_password_def:
+    type: "object"
+    required:
+      - current_password
+      - new_password
+    properties:
+      current_password:
+        type: "string"
+        minLength: 8
+        maxLength: 25
+      new_password:
+        type: "string"
+        minLength: 8
+        maxLength: 25
+  mongoose_default_properties:
+    type: "object"
+    required:
+      - _id
+      - updatedAt
+      - createdAt
+      - __v
+    properties:
+      _id:
+        type: "string"
+        pattern: "^[a-f\\d]{24}$"
+      updatedAt:
+        type: "string"
+        format: date-time
+      createdAt:
+        type: "string"
+        format: date-time
+      __v:
+        type: integer
+parameters:
+  credentials:
+    name: "credentials"
+    in: body
+    description: "User's credentials for login into the system"
+    required: true
+    schema:
+      $ref: "#/definitions/credentials"
+  user_registration_body:
+    name: "registration_body"
+    in: "body"
+    description: "User registration body which includes required details for user registration"
+    required: true
+    schema:
+      $ref: "#/definitions/user_registration_body_def"
+  update_user_body:
+    name: "update_body"
+    in: "body"
+    description: "User update body which includes required details for user update"
+    required: true
+    schema:
+      $ref: "#/definitions/update_user_body_def"
+  user_id:
+    name: "user_id"
+    in: "path"
+    description: "Contains user id"
+    required: true
+    type: string
+    pattern: "^[a-f\\d]{24}$"
+  page:
+    name: "page"
+    in: "query"
+    description: "page number for pagination"
+    type: integer
+    default: 1
+    minimum: 1
+  itemsPerPage:
+    name: "itemsPerPage"
+    in: "query"
+    description: "Records per page in pagination"
+    type: integer
+    default: 20
+    minimum: 1
+  filter_user_first_name:
+    name: "first_name"
+    in: "query"
+    description: "Filter by first name"
+    type: "string"
+    pattern: "^[a-zA-Z]{1,}"
+  filter_user_last_name:
+    name: "last_name"
+    in: "query"
+    description: "Filter by last name"
+    type: "string"
+    pattern: "^[a-zA-Z]{1,}"
+  filter_user_email:
+    name: "email"
+    in: "query"
+    description: "Filter by email"
+    type: "string"
+    format: "email"
+  userSortBy:
+    name: "sortBy"
+    in: "query"
+    description: "User list sort by parameters"
+    type: array
+    items:
+      type: string
+      enum:
+      - "first_name"
+      - "-first_name"
+      - "last_name"
+      - "-last_name"
+      - "email"
+      - "-email"
+  change_password:
+    name: "change_password"
+    in: "body"
+    description: "Change password body for user's password change functionality"
+    required: true
+    schema:
+      $ref: "#/definitions/change_password_def"
+responses:
+  no_content_found:
+    description: "No content found"
+    headers:
+      x-items-count:
+        type: integer
+        description: "Total number of records."
+      x-page-links:
+        type: string
+        description: "Link requires for support Pagination."
+  default_error_response:
+    description: "Unsuccessful operation with any of the response status like 400, 401, 403, 404, 405, 406, 412, 500"
+    schema:
+      $ref: "#/definitions/default_error_response"
+securityDefinitions:
+  Authorization:
+    type: "apiKey"
+    name: "authorization"
+    in: "header"

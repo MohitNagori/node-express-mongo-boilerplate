@@ -1,0 +1,15 @@
+{
+  "JWT": {
+    "secret": "someCIToken",
+    "options": {
+      "expiresIn":  7200
+    }
+  },
+  "LOGGER": {
+    "level": "silly"
+  },
+  "MOCHA_OPTIONS": {
+    "reporter": "spec",
+    "bail": true
+  }
+}

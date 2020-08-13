@@ -1,0 +1,57 @@
+{
+  "name": "boilerplate-of-node",
+  "version": "1.1.0",
+  "description": "This is a starter project with swagger Ui and jwt with helmet, cors, winston and other valuable modules.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint . *.js",
+    "lint-fix": "./node_modules/.bin/eslint . *.js --fix",
+    "start": "npm run lint && npm run migrate && nodemon app.js",
+    "pretest": "node pre-test.js && npm run migrate",
+    "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha ./test.js",
+    "migrate": "node migration"
+  },
+  "keywords": [
+    "swagger",
+    "jwt",
+    "whitelist jwt",
+    "express",
+    "helmet",
+    "mongoose",
+    "redis"
+  ],
+  "author": "Mohit Nagori",
+  "license": "Unlicense",
+  "dependencies": {
+    "async": "^3.1.0",
+    "compression": "^1.7.4",
+    "config": "3.2.1",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "express-request-id": "^1.4.1",
+    "helmet": "^3.21.2",
+    "http-status-codes": "^1.3.2",
+    "js-yaml": "^3.13.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.19",
+    "moment": "^2.24.0",
+    "mongodb-migrations": "^0.8.5",
+    "mongoose": "^5.7.5",
+    "redis": "^2.8.0",
+    "request": "^2.88.0",
+    "swagger-tools": "^0.10.4",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "jsdoc": "^3.6.4",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1",
+    "sinon": "^7.3.2",
+    "z-schema": "^4.1.1"
+  }
+}
